@@ -1,11 +1,10 @@
 pipeline {
-    agent any
+    agent any  // Use any available agent
 
     tools {
-        gradle 'Gradle 4.4.1'   // Match this with Global Tool Configuration
-        jdk 'JDK 11'            // Match this with your configured JDK name
+        gradle 'Gradle'  // Ensure this matches the name configured in Jenkins
+        jdk 'JDK'
     }
-
     stages {
         stage('Checkout') {
             steps {
@@ -13,38 +12,35 @@ pipeline {
             }
         }
 
-        stage('Verify Gradle Version') {
-            steps {
-                sh './gradlew --version'
-            }
-        }
-
         stage('Build') {
             steps {
-                sh './gradlew build'
-
+                sh 'gradle build'  // Run Maven build
             }
         }
 
-        stage('Test') {
-            steps {
-                sh './gradlew test'
-            }
+       stage('Test') {
+           steps {
+               sh 'gradle test'  // Run unit tests
+           }
         }
 
+              
         stage('Run Application') {
             steps {
-                sh './gradlew run'
+                // Start the JAR application
+                sh 'gradle run'
             }
         }
+
+        
     }
 
     post {
         success {
-            echo ' Build and deployment successful!'
+            echo 'Build and deployment successful!'
         }
         failure {
-            echo ' Build failed!'
+            echo 'Build failed!'
         }
     }
 }
